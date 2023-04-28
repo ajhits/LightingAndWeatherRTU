@@ -3554,6 +3554,17 @@ input, select, textarea {
 		font-family: Segoe UI, sans-serif;
 	  }
 
+
+	  /* for scan Button */
+	  .refresh-container {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		font-family: Segoe UI, sans-serif;
+		text-align: center;
+		margin: 20px;
+	  }
+	  
 	  .switch-container {
 		display: flex;
 		flex-direction: column;

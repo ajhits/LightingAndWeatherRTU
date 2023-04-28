@@ -3,7 +3,6 @@
 
 
 const weather = function(){
-
   $.ajax({
     url: "https://api.openweathermap.org/data/2.5/weather?lat=14.57&lon=121.08&appid=75f672498b1c1b9c3a0d06f08247ff2c", // Replace with the URL of your Flask route
     //url: "static/weather.json",
@@ -40,7 +39,7 @@ const forecast  = function(){
 
   $.ajax({
     url: "https://api.openweathermap.org/data/2.5/forecast?lat=14.57&lon=121.08&appid=75f672498b1c1b9c3a0d06f08247ff2c", // Replace with the URL of your Flask route
-    // url: "static/forecast.json",
+    //url: "static/forecast.json",
     type: "GET", // Replace with the HTTP method of your Flask route
     data: { /* Replace with any data you need to send to the server */ },
         success: function(response) {
