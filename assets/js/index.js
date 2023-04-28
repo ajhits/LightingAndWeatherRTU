@@ -3,7 +3,7 @@
 
 
 const weather = function(){
-
+  console.log("clicekc")
     $.ajax({
       url: "https://api.openweathermap.org/data/2.5/weather?lat=14.57&lon=121.08&appid=75f672498b1c1b9c3a0d06f08247ff2c", // Replace with the URL of your Flask route
       //url: "static/weather.json",

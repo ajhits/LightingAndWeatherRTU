@@ -3563,6 +3563,16 @@ input, select, textarea {
 		margin: 20px;
 	  }
 	  
+	  	  /* for scan Button */
+		.refresh-container {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			font-family: Segoe UI, sans-serif;
+			text-align: center;
+			margin: 20px;
+		}
+
 	  .switch-row {
 		display: block;
 		margin: 0 auto;
