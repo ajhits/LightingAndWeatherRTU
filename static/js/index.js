@@ -17,8 +17,6 @@ const weather = function(){
         
         document.getElementById("DateNow").innerHTML = formattedDate
         
-
-          
       
         // humidity
         const Humidity = response.main.humidity;
