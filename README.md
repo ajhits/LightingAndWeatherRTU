@@ -1,3 +1,5 @@
 # LightingAndWeatherRTU
 
-tanginamo enzo api nalANG HAHAHAHAHAHAHA -PURAK
+tanginamo enzo api nalang HAHAHAHAHAHAHA -PURAK
+
+NOTE: ako na nag tama ng pagkakamali nyo
