@@ -64,11 +64,11 @@
 							<div class="display-row">
 								<div class="temperature-box">
 								  <span class="label">Temperature</span>
-								  <span class="value">22&deg;C</span>
+								  <span class="value" id="Temp">22&deg;C</span>
 								</div>
 								<div class="humidity-box">
 								  <span class="label">Humidity</span>
-								  <span class="value">55%</span>
+								  <span class="value" id="Humid">55%</span>
 								</div>
 							  </div>
 							  <div class="brightness-slider">
@@ -96,13 +96,14 @@
 							    
 							  <div class="weather-box">
 								<h2>Today's Weather</h2>
+								<h3 id="DateNow">Mon, April 28</h3>
 								<ul>
-								  <li>7am: Sunny, 25°C</li>
-								  <li>10am: Partly cloudy, 28°C</li>
-								  <li>1pm: Mostly sunny, 31°C</li>
-								  <li>4pm: Scattered thunderstorms, 27°C</li>
-								  <li>7pm: Rain, 23°C</li>
-								  <li>9pm: Cloudy, 20°C</li>
+								  <li id="1time">7am: Sunny, 25°C</li>
+								  <li id="2time">10am: Partly cloudy, 28°C</li>
+								  <li id="3time">1pm: Mostly sunny, 31°C</li>
+								  <li id="4time">4pm: Scattered thunderstorms, 27°C</li>
+								  <li id="5time">7pm: Rain, 23°C</li>
+								  <li id="6time">9pm: Cloudy, 20°C</li>
 								</ul>
 							  </div>
 							  
@@ -184,7 +185,8 @@
 			<script src="static/js/breakpoints.min.js"></script>
 			<script src="static/js/util.js"></script>
 			<script src="static/js/main.js"></script>
-
+			
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 			<script src="static/js/index.js"></script>
 
 	</body>
