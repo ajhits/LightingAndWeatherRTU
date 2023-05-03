@@ -1,5 +1,5 @@
 # LightingAndWeatherRTU
 
-tanginamo enzo api nalANG HAHAHAHAHAHAHA -PURAK
+
 
 ## MERON NANG WEATHERING WITH YOU API
