@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE HTML> -->
+<!DOCTYPE HTML>
 
 <html>
 	<head>
@@ -11,7 +11,7 @@
 	<body class="is-preload">
 
 		<!-- Header -->
-			<section id="header">
+			<section id="header" style="background-image: url('images/aas.jpg'); background-repeat: no-repeat; background-size: fill;">
 				<div class="inner">
 					<span class="icon solid major fa-cloud"></span>
 					<h1>Hi, I'm <strong>Photon</strong> AI<br />
@@ -43,109 +43,109 @@
 			</section>
 
 		<!-- Two -->
-			<section id="two" class="main style2">
-				<div class="container">
-					<div class="row gtr-150">
-						<div class="col-6 col-12-medium">
-							<ul class="major-icons">
-								<li><span class="icon solid style3 major fa-sun"></span></li>
-								<li><span class="icon solid style2 major fa-bolt"></span></li>
-								<li><span class="icon solid style3 major fa-globe"></span></span></li>
-								<li><span class="icon solid style3 major fa-cloud-rain"></span></li>
-								<li><span class="icon solid style3 major fa-cloud-showers-heavy"></span></li>
-								<li><span class="icon solid style3 major fa-thermometer-half"></span></li>
-							</ul>
-						</div>
-						<div class="col-6 col-12-medium">
-							<header class="major">
-								<h2>Here are the readings and<br />
-								controls for the system.</h2>
-							</header>
-							<div class="display-row">
-								<div class="temperature-box">
-								  <span class="label">Temperature</span>
-								  <span class="value" id="Temp">22&deg;C</span>
-								</div>
-								<div class="humidity-box">
-								  <span class="label">Humidity</span>
-								  <span class="value" id="Humid">55%</span>
-								</div>
-							  </div>
-							  <div class="brightness-slider">
-								<label for="brightness">Brightness:</label>
-								<input type="range" id="brightness" name="brightness" min="0" max="100" value="50">
-								<div class="brightness-example"></div>
-							  </div>
-															
-							  <div class="switch-container">
-								<div class="switch-row">
-								  <span class="switch-label">Fan</span>
-								  <label class="switch">
-									<input type="checkbox">
-									<span class="slider"></span>
-								  </label>
-								</div>
-								<div class="switch-row">
-								  <span class="switch-label">Light</span>
-								  <label class="switch">
-									<input type="checkbox">
-									<span class="slider"></span>
-								  </label>
-								</div>
+		<section id="two" class="main style2">
+			<div class="container">
+				<div class="row gtr-150">
+					<div class="col-6 col-12-medium">
+						<ul class="major-icons">
+							<li><span class="icon solid style3 major fa-sun"></span></li>
+							<li><span class="icon solid style2 major fa-bolt"></span></li>
+							<li><span class="icon solid style3 major fa-globe"></span></span></li>
+							<li><span class="icon solid style3 major fa-cloud-rain"></span></li>
+							<li><span class="icon solid style3 major fa-cloud-showers-heavy"></span></li>
+							<li><span class="icon solid style3 major fa-thermometer-half"></span></li>
+						</ul>
+					</div>
+					<div class="col-6 col-12-medium">
+						<header class="major">
+							<h2>Here are the readings and<br />
+							controls for the system.</h2>
+						</header>
+						<div class="display-row">
+							<div class="temperature-box">
+							  <span class="label">Temperature</span>
+							  <span class="value" id="Temp">22&deg;C</span>
+							</div>
+							<div class="humidity-box">
+							  <span class="label">Humidity</span>
+							  <span class="value" id="Humid">55%</span>
+							</div>
+						  </div>
+						  <div class="brightness-slider">
+							<label for="brightness">Brightness:</label>
+							<input type="range" id="brightness" name="brightness" min="0" max="100" value="50">
+							<div class="brightness-example"></div>
+						  </div>
+														
+						  <div class="switch-container">
+							<div class="switch-row">
+							  <span class="switch-label">Fan</span>
+							  <label class="switch">
+								<input type="checkbox">
+								<span class="slider"></span>
+							  </label>
+							</div>
+							<div class="switch-row">
+							  <span class="switch-label">Light</span>
+							  <label class="switch">
+								<input type="checkbox">
+								<span class="slider"></span>
+							  </label>
+							</div>
 
-								<!-- scan weather -->
-								<div class="refresh-container">
-									<button class="refresh-btn" onclick="weather(); forecast(); ">Scan Weather</button>
-								</div>
+							<!-- scan weather -->
+							<div class="refresh-container">
+								<button class="refresh-btn" onclick="weather(); forecast(); ">Scan Weather</button>
+							</div>
+						
+						  </div>
 							
-							  </div>
-							    
-							  <div class="weather-box">
-								<h2>Today's Weather</h2>
-								<h3 id="DateNow">Mon, April 28</h3>
-								<ul>
-								  <li id="1time">7am: Sunny, 25°C</li>
-								  <li id="2time">10am: Partly cloudy, 28°C</li>
-								  <li id="3time">1pm: Mostly sunny, 31°C</li>
-								  <li id="4time">4pm: Scattered thunderstorms, 27°C</li>
-								  <li id="5time">7pm: Rain, 23°C</li>
-								  <li id="6time">9pm: Cloudy, 20°C</li>
-								</ul>
-							  </div>
-							  
-						</div>
+						  <div class="weather-box">
+							<h2>Today's Weather</h2>
+							<h3 id="DateNow">Mon, April 28</h3>
+							<ul>
+							  <li id="1time">7am: Sunny, 25°C</li>
+							  <li id="2time">10am: Partly cloudy, 28°C</li>
+							  <li id="3time">1pm: Mostly sunny, 31°C</li>
+							  <li id="4time">4pm: Scattered thunderstorms, 27°C</li>
+							  <li id="5time">7pm: Rain, 23°C</li>
+							  <li id="6time">9pm: Cloudy, 20°C</li>
+							</ul>
+						  </div>
+						  
 					</div>
 				</div>
-			</section>
+			</div>
+		</section>
 
 		<!-- Three -->
 			<section id="three" class="main style1 special">
 				<div class="container">
 					<header class="major">
-						<h2>Under Construction Lorem muna</h2>
+						<h2>The Weather AI Features</h2>
 					</header>
-					<p>Ante nunc accumsan et aclacus nascetur ac ante amet sapien sed.</p>
+					<p>Rain or shine, the weather AI is always on the line.</p>
 					<div class="row gtr-150">
 						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/pic02.jpg" alt="" /></span>
-							<h3>Magna feugiat lorem</h3>
-							<p>Adipiscing a commodo ante nunc magna lorem et interdum mi ante nunc lobortis non amet vis sed volutpat et nascetur.</p>
+							<span class="image fit"><img src="images/one.jpg" alt="" /></span>
+							<h3>Advanced Data Analysis</h3>
+							<p>Weather AI can collect and analyze massive amounts of data from various sources, including satellites, weather stations, and sensors, to provide highly accurate weather predictions.</p>
 							<ul class="actions special">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
 						</div>
 						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/pic03.jpg" alt="" /></span>
-							<h3>Magna feugiat lorem</h3>
-							<p>Adipiscing a commodo ante nunc magna lorem et interdum mi ante nunc lobortis non amet vis sed volutpat et nascetur.</p>
+							<span class="image fit"><img src="images/two.jpg" alt="" /></span>
+							<h3>Personalized Recommendations</h3>
+							<p>Weather AI can provide personalized recommendations to users based on their location, preferences, and historical weather data.</p>
 							<ul class="actions special">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
 						</div>
 						<div class="col-4 col-12-medium">
-							<span class="image fit"><img src="images/pic04.jpg" alt="" /></span>
-							<h3>Magna feugiat lorem</h3>
-							<p>Adipiscing a commodo ante nunc magna lorem et interdum mi ante nunc lobortis non amet vis sed volutpat et nascetur.</p>
+							<span class="image fit"><img src="images/three.jpg" alt="" /></span>
+							<h3>Real-time Weather Updates</h3>
+							<p>Weather AI can provide real-time weather updates and alerts to users, notifying them of any significant changes in weather conditions.</p>
 							<ul class="actions special">
 								<li><a href="#" class="button">More</a></li>
 							</ul>
@@ -162,8 +162,8 @@
 					</header>
 					<p>Conserving energy and still giving you the right needs.</p>
 					<ul class="actions special">
-						<li><a href="#" class="button wide primary">Subscribe for real time updates of the weather?</a></li>
-						<li><a href="#" class="button wide">Learn More</a></li>
+						<li><a href="#" class="button wide primary">Subscribe?</a></li>
+						<li><a href="fillup/index.html#contact" class="button wide">Message Us</a></li>
 					</ul>
 				</div>
 			</section>
@@ -185,16 +185,16 @@
 			</section>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-			
-			<!-- for weather API -->
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-			<script src="assets/js/index.js"></script>
+		<script src="assets/js/jquery.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/browser.min.js"></script>
+		<script src="assets/js/breakpoints.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		
+		<!-- for weather API -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="assets/js/index.js"></script>
 
 	</body>
 </html>
