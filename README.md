@@ -1,5 +1,0 @@
-# LightingAndWeatherRTU
-
-
-
-## MERON NANG WEATHERING WITH YOU API
