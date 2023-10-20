@@ -21,6 +21,7 @@
     data-sidebar-position="fixed" data-header-position="fixed">
     <!-- Sidebar Start -->
     <aside class="left-sidebar">
+
       <!-- Sidebar scroll-->
       <div>
         <div class="brand-logo d-flex align-items-center justify-content-between">
@@ -31,6 +32,7 @@
             <i class="ti ti-x fs-8"></i>
           </div>
         </div>
+
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
           <ul id="sidebarnav">
@@ -117,7 +119,9 @@
     </aside>
     <!--  Sidebar End -->
     <!--  Main wrapper -->
+
     <div class="body-wrapper">
+
       <!--  Header Start -->
       <header class="app-header">
         <nav class="navbar navbar-expand-lg navbar-light">
@@ -160,9 +164,11 @@
         <h1 class="mb-4">CCTV FEED TRACKING</h1>
         <div class="row justify-content-center">
           <div class="col-lg-7">
-            <video id="camera-feed" width="640" height="480" autoplay class="mb-4"></video>
+            <!-- <video id="camera-feed" width="640" height="480" autoplay class="mb-4"></video> -->
+            <img id="camera-feed" width="640" height="480" autoplay class="mb-4" src="http://192.168.100.38:3000/video">
           </div>
         </div>
+
         <button class="btn btn-primary w-40 py-2 fs-4 mb-4 rounded-pill">Capture</button>
         <canvas id="captured-image" style="display: none;"></canvas>
 
