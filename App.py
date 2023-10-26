@@ -96,7 +96,7 @@ def generate_frames():
                 
                 
                 # get minum threshold value
-                if confidence > 0.8:
+                if confidence > 0.4:
                     class_id = int(detections[0, 0, i, 1])
 
                     # detect it is person first
@@ -144,8 +144,7 @@ def generate_frames():
 		# draw a horizontal line in the center of the frame -- once an
 		# object crosses this line we will determine whether they were
 		# moving 'up' or 'down'
-        cv2.line(frame, (W // 2, 0), (W // 2, H), (0, 0, 255), 3)
-
+        cv2.line(frame, (0, H // 2), (W, H // 2), (0, 0, 0), 3)
         cv2.putText(frame, "-Prediction border - Entrance-", (10, H - ((i * 20) + 200)),
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 1)
 
@@ -177,27 +176,31 @@ def generate_frames():
 				# check to see if the object has been counted or not
                 if not to.counted:
         
- # ******************* EXIT (Left to Right)    
+ # ******************* EXIT   
 					# if the direction is negative (indicating the object
 					# is moving up) AND the centroid is above the center
 					# line, count the object
-                    if direction < 0 and centroid[1] < W // 2:
+                    if direction < 0 and centroid[1] < H // 2:
                         totalUp += 1
                         date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
                         move_out.append(totalUp)
                         out_time.append(date_time)
                         to.counted = True
 
-# ******************* ENTRY (Left to Right)
+# ******************* ENTRY )
 					# if the direction is positive (indicating the object
 					# is moving down) AND the centroid is below the
 					# center line, count the object
-                    elif direction > 0 and centroid[1] > W // 2:
+                    elif direction > 0 and centroid[1] > H // 2:
                         totalDown += 1
-                        date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
+                        # date_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
                         move_in.append(totalDown)
-                        in_time.append(date_time)
-                        
+                        # in_time.append(date_time)
+						# if the people limit exceeds over threshold, send an email alert
+                        if sum(total) >= 30:
+                            cv2.putText(frame, "-ALERT: People limit exceeded-", (10, frame.shape[0] - 80),
+								cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 255), 2)
+			
                         to.counted = True
 						# compute the sum of total people inside
                         total = []
