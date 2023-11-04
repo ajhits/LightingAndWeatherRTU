@@ -51,7 +51,7 @@ while cap.isOpened():
         min_x, max_x, min_y, max_y = int(min_x * frame.shape[1]), int(max_x * frame.shape[1]), int(min_y * frame.shape[0]), int(max_y * frame.shape[0])
 
         # Calculate the chest level coordinates
-        chest_x = (min_x + max_x) // 2
+        chest_x = max_x
         chest_y = (min_y)  # You can modify this to fine-tune the chest level
 
         # Draw the bounding box
@@ -63,15 +63,19 @@ while cap.isOpened():
         if previous_chest_x is not None:
             movement = chest_x - previous_chest_x
             
-            if movement > 10 and chest_x >= 320 and not person_counted:
+            if movement > 0:
                 movement_text = "Moving Right"
-                ENTRY = 1
+                cv2.putText(frame, f"E{movement_text}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
+            if movement < 0:
+                movement_text = "Moving Left"
+                cv2.putText(frame, f"E{movement_text}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
  
         previous_chest_x = chest_x
     
         FINAL_ENTRY = FINAL_ENTRY + ENTRY
        
-    cv2.putText(frame, f"Entry: {FINAL_ENTRY} | Exit: {EXIT}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
         
     # Draw the vertical line
     cv2.line(frame, (W // 2, 0), (W // 2, H), (0, 0, 0), 3)

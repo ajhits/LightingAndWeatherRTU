@@ -157,6 +157,8 @@ def generate_frames():
 			# check to see if a trackable object exists for the current
 			# object ID
             to = trackableObjects.get(objectID, None)
+            
+            print(centroid[1])
 
 			# if there is no existing trackable object, create one
             if to is None:
