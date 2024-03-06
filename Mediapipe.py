@@ -1,92 +1,135 @@
+import argparse
+import sys
+import time
+
 import cv2
 import mediapipe as mp
 
-# Initialize MediaPipe
-mp_holistic = mp.solutions.holistic
-holistic = mp_holistic.Holistic(min_detection_confidence=0.3, min_tracking_confidence=0.5)
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
 
-# Initialize OpenCV for capturing video
-cap = cv2.VideoCapture(0)
+from utils import visualize
 
-ENTRY = 0
-FINAL_ENTRY = 0
-EXIT = 0
-previous_chest_x = None  # Variable to store the previous chest X-coordinate
-person_counted = False  # Flag to track if a person has been counted
 
-while cap.isOpened():
-    ret, frame = cap.read()
-    frame = cv2.flip(frame, 1)
-    if not ret:
-        continue
+def run(model: str, camera_id: int, width: int, height: int) -> None:
+  """Continuously run inference on images acquired from the camera.
 
-    # Initialize the frame dimensions (we'll set them as soon as we read
-    # the first frame from the video)
-    W = None
-    H = None
+  Args:
+    model: Name of the TFLite object detection model.
+    camera_id: The camera id to be passed to OpenCV.
+    width: The width of the frame captured from the camera.
+    height: The height of the frame captured from the camera.
+  """
 
-    # if the frame dimensions are empty, set them
-    if W is None or H is None:
-        (H, W) = frame.shape[:2]
+  # Variables to calculate FPS
+  counter, fps = 0, 0
+  start_time = time.time()
 
-    # Convert the BGR image to RGB
-    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+  # Start capturing video input from the camera
+  cap = cv2.VideoCapture(camera_id)
+  cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+  cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
-    # Process the frame using MediaPipe
-    results = holistic.process(frame_rgb)
-    
-    if results.pose_landmarks:
-        # If pose landmarks are detected, it's a person
-        # Get the bounding box around the person
-        bbox_cords = results.pose_landmarks.landmark
-        min_x, max_x, min_y, max_y = 1, -1, 1, -1
+  # Visualization parameters
+  row_size = 20  # pixels
+  left_margin = 24  # pixels
+  text_color = (0, 0, 255)  # red
+  font_size = 1
+  font_thickness = 1
+  fps_avg_frame_count = 10
 
-        for landmark in bbox_cords:
-            x, y, _ = landmark.x, landmark.y, landmark.z
-            min_x = min(min_x, x)
-            max_x = max(max_x, x)
-            min_y = min(min_y, y)
-            max_y = max(max_y, y)
+  detection_result_list = []
 
-        min_x, max_x, min_y, max_y = int(min_x * frame.shape[1]), int(max_x * frame.shape[1]), int(min_y * frame.shape[0]), int(max_y * frame.shape[0])
+  def visualize_callback(result: vision.ObjectDetectorResult,
+                         output_image: mp.Image, timestamp_ms: int):
+      result.timestamp_ms = timestamp_ms
+      detection_result_list.append(result)
 
-        # Calculate the chest level coordinates
-        chest_x = max_x
-        chest_y = (min_y)  # You can modify this to fine-tune the chest level
 
-        # Draw the bounding box
-        cv2.rectangle(frame, (min_x, min_y), (max_x, max_y), (0, 255, 0), 2)
+  # Initialize the object detection model
+  base_options = python.BaseOptions(model_asset_path=model)
+  options = vision.ObjectDetectorOptions(base_options=base_options,
+                                         running_mode=vision.RunningMode.LIVE_STREAM,
+                                         score_threshold=0.8,
+                                         result_callback=visualize_callback)
+  detector = vision.ObjectDetector.create_from_options(options)
 
-        # Draw the chest-level dot as a red circle
-        cv2.circle(frame, (chest_x, chest_y), 5, (0, 0, 255), -1)
-        
-        if previous_chest_x is not None:
-            movement = chest_x - previous_chest_x
-            
-            if movement > 0:
-                movement_text = "Moving Right"
-                cv2.putText(frame, f"E{movement_text}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
 
-            if movement < 0:
-                movement_text = "Moving Left"
-                cv2.putText(frame, f"E{movement_text}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
- 
-        previous_chest_x = chest_x
-    
-        FINAL_ENTRY = FINAL_ENTRY + ENTRY
-       
+  # Continuously capture images from the camera and run inference
+  while cap.isOpened():
+    success, image = cap.read()
+    if not success:
+      sys.exit(
+          'ERROR: Unable to read from webcam. Please verify your webcam settings.'
+      )
 
-        
-    # Draw the vertical line
-    cv2.line(frame, (W // 2, 0), (W // 2, H), (0, 0, 0), 3)
-    cv2.line(frame, (315, 0), (315, H), (255, 0, 0), 1)
-    cv2.line(frame, (640 - 315, 0), (640 - 315, H), (0, 0, 255), 1)
+    counter += 1
+    image = cv2.flip(image, 1)
 
-    # Display the frame with the bounding box, chest-level dot, and movement information
-    cv2.imshow('Person Detection', frame)
+    # Convert the image from BGR to RGB as required by the TFLite model.
+    rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
 
-    if cv2.waitKey(1) & 0xFF == 27:  # Press 'Esc' to exit
-        break
+    # Run object detection using the model.
+    detector.detect_async(mp_image, counter)
+    current_frame = mp_image.numpy_view()
+    current_frame = cv2.cvtColor(current_frame, cv2.COLOR_RGB2BGR)
 
-cap.release()
-cv2.destroyAllWindows()
+    # Calculate the FPS
+    if counter % fps_avg_frame_count == 0:
+        end_time = time.time()
+        fps = fps_avg_frame_count / (end_time - start_time)
+        start_time = time.time()
+
+    # Show the FPS
+    fps_text = 'FPS = {:.1f}'.format(fps)
+    text_location = (left_margin, row_size)
+    cv2.putText(current_frame, fps_text, text_location, cv2.FONT_HERSHEY_PLAIN,
+                font_size, text_color, font_thickness)
+
+    if detection_result_list:
+        print(detection_result_list)
+        vis_image = visualize(current_frame, detection_result_list[0])
+        cv2.imshow('object_detector', vis_image)
+        detection_result_list.clear()
+    else:
+        cv2.imshow('object_detector', current_frame)
+
+    # Stop the program if the ESC key is pressed.
+    if cv2.waitKey(1) == 27:
+      break
+
+  detector.close()
+  cap.release()
+  cv2.destroyAllWindows()
+
+
+def main():
+  parser = argparse.ArgumentParser(
+      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+  parser.add_argument(
+      '--model',
+      help='Path of the object detection model.',
+      required=False,
+      default='efficientdet_lite0.tflite')
+  parser.add_argument(
+      '--cameraId', help='Id of camera.', required=False, type=int, default=0)
+  parser.add_argument(
+      '--frameWidth',
+      help='Width of frame to capture from camera.',
+      required=False,
+      type=int,
+      default=400)
+  parser.add_argument(
+      '--frameHeight',
+      help='Height of frame to capture from camera.',
+      required=False,
+      type=int,
+      default=300)
+  args = parser.parse_args()
+
+  run(args.model, int(args.cameraId), args.frameWidth, args.frameHeight)
+
+
+if __name__ == '__main__':
+  main()
