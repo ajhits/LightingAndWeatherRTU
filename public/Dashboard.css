@@ -1,0 +1,49 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .account-icon {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .central-components {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .info-box {
+    margin: 10px;
+    padding: 20px;
+    background: #f9f9f9;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .data-table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+  }
+  
+  .data-table th, .data-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  .data-table th {
+    background-color: #f2f2f2;
+  }
+  

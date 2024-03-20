@@ -1,0 +1,121 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.account-icon {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+}
+
+.mode-toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.central-components {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.info-box {
+  margin: 10px;
+  padding: 20px;
+  background: #f9f9f9;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.info-box:hover {
+  transform: translateY(-5px);
+}
+
+.info-box h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.info-box p {
+  font-size: 16px;
+  color: #666;
+}
+
+.data-table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.data-table th {
+  background-color: #f2f2f2;
+}
+
+.data-table td {
+  background-color: #fff;
+}
+
+.table-name {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+}
+
+.dark-mode .account-icon,
+.dark-mode .mode-toggle {
+  color: #fff;
+}
+
+.dark-mode .info-box {
+  background-color: white;
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .data-table th {
+  background-color: #444;
+  color: #fff;
+}
+
+.dark-mode .data-table td {
+  background-color: #333;
+  color: #fff;
+}
+.table-name {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333; /* Default color for light mode */
+}
+
+.dark-mode .table-name {
+  color: #fff; /* Color for dark mode */
+}
+
