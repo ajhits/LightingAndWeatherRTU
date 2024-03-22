@@ -1,145 +1,172 @@
-import cv2
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import *
+from flask import Flask, render_template, Response,jsonify
 from model.Object_detection import ObjectDetector
+from firebase.Firebase import Firebase
+
+import cv2
+import RPi.GPIO as GPIO
+import time
+import threading
 
 
-class App(QtWidgets.QFrame):
-    def __init__(self,parent=None):
-        super().__init__(parent)
-        
-        # Create an instance of the ObjectDetector class
-        self.object_detector = ObjectDetector(model='model/ssd_mobilenet_v2.tflite')
-        self.object_detector.run()
-        
-        # for video streaming variable
-        self.videoStream = cv2.VideoCapture(1) if cv2.VideoCapture(1).isOpened() else cv2.VideoCapture(0)
-        self.videoStream.set(4, 1080)
-        
-        # Frame
-        self.setObjectName("Lightning weather system RTU")
-        self.resize(1024, 565)
-        self.setFrameShape(QtWidgets.QFrame.Box)
-        
-        self.setAutoFillBackground(False)
-        self.setStyleSheet("background-color: rgb(231, 229, 213);\n")
-        self.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.setLineWidth(2)
-        
-        self.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        
-        # background widget
-        self.widget = QtWidgets.QWidget(self)
-        self.widget.setGeometry(QtCore.QRect(0, 0, 1031, 571))
-        self.widget.setStyleSheet("background-color: #f5f5f5")
-        self.widget.setObjectName("widget")
-        
-        # video
-        self.video = QtWidgets.QLabel(self.widget)
-        self.video.setGeometry(QtCore.QRect(340, 90, 631, 451))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(26)
-        self.video.setFont(font)
-        self.video.setCursor(QtGui.QCursor(QtCore.Qt.ForbiddenCursor))
-        self.video.setStyleSheet("border: 2px solid #30475E;\n"
-"\n"
-"color: #121212"
-"")
-        self.video.setScaledContents(False)
-        self.video.setAlignment(QtCore.Qt.AlignCenter)
-        self.video.setObjectName("video")
-        
-        # Title
-        self.Title = QtWidgets.QLabel(self.widget)
-        self.Title.setGeometry(QtCore.QRect(0, 20, 1021, 51))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(26)
-        self.Title.setFont(font)
-        self.Title.setCursor(QtGui.QCursor(QtCore.Qt.ForbiddenCursor))
-        self.Title.setStyleSheet("color: #121212\n"
-"")
-        self.Title.setScaledContents(False)
-        self.Title.setAlignment(QtCore.Qt.AlignCenter)
-        self.Title.setObjectName("video_2")
-        
-        # Person IN
-        self.PersonIn = QtWidgets.QLabel(self.widget)
-        self.PersonIn.setGeometry(QtCore.QRect(50, 110, 251, 191))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(26)
-        self.PersonIn.setFont(font)
-        self.PersonIn.setCursor(QtGui.QCursor(QtCore.Qt.ForbiddenCursor))
-        self.PersonIn.setStyleSheet("border: 2px solid #30475E ;\n"
-"border-radius: 50px;\n"
-"color: #121212")
-        self.PersonIn.setScaledContents(False)
-        self.PersonIn.setAlignment(QtCore.Qt.AlignCenter)
-        self.PersonIn.setObjectName("PersonIn")
-        
-        # Person Out
-        self.PersonOut = QtWidgets.QLabel(self.widget)
-        self.PersonOut.setGeometry(QtCore.QRect(50, 330, 251, 191))
-        font = QtGui.QFont()
-        font.setFamily("Segoe UI")
-        font.setPointSize(26)
-        self.PersonOut.setFont(font)
-        self.PersonOut.setCursor(QtGui.QCursor(QtCore.Qt.ForbiddenCursor))
-        self.PersonOut.setStyleSheet("border: 2px solid #30475E ;\n"
-"border-radius: 50px;\n"
-"color: #121212")
-        self.PersonOut.setScaledContents(False)
-        self.PersonOut.setAlignment(QtCore.Qt.AlignCenter)
-        self.PersonOut.setObjectName("PersonIn")
-        
-        # timer
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.videoStreaming)
-        self.timer.start(30)
-        
-        
-        self.retranslateUi()
-        QtCore.QMetaObject.connectSlotsByName(self)
-        
-    def retranslateUi(self):
-        _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Frame", "lighthning weather"))
-        self.video.setText(_translate("Frame", "Video itsadasdaso"))
-        self.PersonIn.setText(_translate("Frame", "0\nperson in"))
-        self.PersonOut.setText(_translate("Frame", "0\nperson out"))
-        self.Title.setText(_translate("Frame", "Lightning AND Weather system in RTU"))
-        
-     # for video streaming
-    def videoStreaming(self):
-        ret, frame = self.videoStream.read()
-        
-        # if no detected frames
-        if not ret:
-            self.video.setText("Please wait camera is loading")
-            return
-        
-        # Object detection
-        frame_with_objects = self.object_detector.detect_objects(frame)
-        
+DELAY_TIMEOUT = 1.5  # Equivalent to 1500 milliseconds
 
-        # display the frame on the label
-        height, width, channel = frame_with_objects.shape
-        bytesPerLine = channel * width
-        qImg = QtGui.QImage(frame.data, width, height, bytesPerLine, QtGui.QImage.Format_BGR888)
-        pixmap = QtGui.QPixmap.fromImage(qImg)
-        self.video.setPixmap(pixmap)
+ir_right_pin = 20
+ir_left_pin = 21
 
+# in counter
+in_counter = 0
+
+# out counter
+out_counter = 0
+
+last_trigger_time = 0
+is_walking_in = False
+is_walking_out = False
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(ir_right_pin, GPIO.IN)
+GPIO.setup(ir_left_pin, GPIO.IN)
+
+
+app = Flask(__name__)
+
+# in counter
+app.config["in_counter"] = 0
+
+# out counter
+app.config["out_counter"] = 0
+
+
+# Create an instance of the ObjectDetector class
+object_detector = ObjectDetector(model='model/ssd_mobilenet_v2.tflite')
+object_detector.run()
+
+# ********************************* API ENDPOINTS
+
+@app.route("/checkWalkIn", methods=["GET"])
+def check_walk_in_api():
+    global is_walking_in, last_trigger_time
+
+    in_counter = app.config["in_counter"]
+    
+    ir_right_state = GPIO.input(ir_right_pin)
+
+    if not is_walking_in and ir_right_state == GPIO.LOW:
+        is_walking_in = True
+        last_trigger_time = time.time()
+
+    if time.time() - last_trigger_time > DELAY_TIMEOUT:
+        is_walking_in = False
+
+    ir_left_state = GPIO.input(ir_left_pin)
+    if is_walking_in and ir_left_state == GPIO.LOW and ir_right_state == GPIO.HIGH:
+        is_walking_in = False
+        in_counter += 1
+        last_trigger_time = time.time()
+        
+        Firebase().firebase_insert({
+            "person_status": "person out",
+            "last_trigger_time": last_trigger_time
+        })
+                
+        print("Person entered. People in: {}, People out: {}".format(in_counter, out_counter))
+        
+    app.config["in_counter"] = in_counter
+
+    # Prepare response data
+    response_data = {
+        "person_in":  app.config["in_counter"],
+        "is_walking_in": is_walking_in,
+        "last_trigger_time": last_trigger_time
+    }
+    
+    print("walk in: ",response_data)
+    return jsonify(response_data)
+
+@app.route("/checkWalkOut", methods=["GET"])
+def check_walk_out_api():
+    global is_walking_out, last_trigger_time
+
+    out_counter = app.config["out_counter"]
+    in_counter = app.config["in_counter"]
+    
+    ir_left_state = GPIO.input(ir_left_pin)
+        
+    if not is_walking_out and ir_left_state == GPIO.LOW:
+        is_walking_out = True
+        last_trigger_time = time.time()
+        
+    if time.time() - last_trigger_time > DELAY_TIMEOUT:
+        is_walking_out = False
+        
+    ir_right_state = GPIO.input(ir_right_pin)
+    if is_walking_out and ir_right_state == GPIO.LOW and ir_left_state == GPIO.HIGH:
+        is_walking_out = False
+        out_counter += 1
+        last_trigger_time = time.time()
+        
+        Firebase().firebase_insert({
+            "person_status": "person out",
+            "last_trigger_time": last_trigger_time
+        })
+            
+        print("Person exited. People in: {}, People out: {}".format(in_counter, out_counter))
+        if in_counter > 0:
+            in_counter -= 1
+            print("Person left the building. People in: {}, People out: {}".format(in_counter, out_counter))
+        
+    app.config["out_counter"] = out_counter
+    app.config["in_counter"] = in_counter
+
+    # Prepare response data
+    response_data = {
+        "person_out":  app.config["out_counter"],
+        "is_walking_in": is_walking_in,
+        "last_trigger_time": last_trigger_time
+    }
+
+    print("walk out: ",response_data)
+    return jsonify(response_data)
+
+
+# Homepage
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+def generate_videofeed():
+    cap = cv2.VideoCapture(0)
+    frame_count = 0
+    while True:
+        success, frame = cap.read()
+        if not success:
+            continue
+        
+        # frame_count += 1
+        # if frame_count % 2 == 0: 
+        
+        # object detection
+        frame = cv2.flip(frame, 1)
+        frame_with_objects = object_detector.detect_objects(frame)
         
         
-if __name__ == "__main__":
+        ret, jpeg = cv2.imencode('.jpg', frame_with_objects)
+        frame_bytes = jpeg.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
 
-    import sys
-    # Create a new QApplication object
-    app = QApplication(sys.argv)
+# Object detection   
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_videofeed(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
-    New_menu = App()
-    New_menu.show() 
 
-    sys.exit(app.exec_())
+if __name__ == '__main__':
+    
+
+    
+    app.run(
+        host='0.0.0.0',
+        debug=True,
+        port=3000)

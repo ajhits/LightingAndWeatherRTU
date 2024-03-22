@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Stream with Person Count</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #video-container {
+            position: relative;
+            width: 80%; /* Adjust width as needed */
+            height: auto; /* Maintain aspect ratio */
+        }
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .person-count {
+            position: absolute;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        #enter-count {
+            top: 20px;
+            left: 20px;
+        }
+        #exit-count {
+            top: 60px;
+            left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <img id="video_feed" src="{{ url_for('video_feed') }}">
+        <div id="enter-count" class="person-count">Enter: 0 people</div>
+        <div id="exit-count" class="person-count">Exit: 0 people</div>
+    </div>
+    <script>
+
+    // check in count
+    async function check_in_counts() {
+        await fetch('/checkWalkIn', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },})
+        .then(response => response.json())
+        .then(data => {
+            const enterCount = data.person_in;
+            document.getElementById('enter-count').innerText = `Enter: ${enterCount} people`;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+
+    // check out count
+    async function check_out_counts() {
+        await fetch('/checkWalkOut', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },})
+        .then(response => response.json())
+        .then(data => {
+            const exitCount = data.person_out;
+            document.getElementById('exit-count').innerText = `Exit: ${exitCount} people`;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+
+    // Call the function initially to fetch and update counts
+    check_in_counts();
+    check_out_counts();
+
+    // Call the function periodically to update counts at regular intervals
+    setInterval(function update(){
+        check_in_counts();
+        check_out_counts();
+    }, 500); // Update every 5 seconds (adjust as needed)
+</script>
+</body>
+</html>
+

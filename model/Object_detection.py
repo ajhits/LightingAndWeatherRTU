@@ -23,7 +23,7 @@ class ObjectDetector:
         base_options = python.BaseOptions(model_asset_path=self.model)
         options = vision.ObjectDetectorOptions(base_options=base_options,
                                                running_mode=vision.RunningMode.LIVE_STREAM,
-                                               score_threshold=0.8,
+                                               score_threshold=0.7,
                                                result_callback=self.visualize_callback)
         self.detector = vision.ObjectDetector.create_from_options(options)
 
