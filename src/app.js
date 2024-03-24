@@ -8,6 +8,8 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 
 // pages
 import DashboardPage from "./containers/dashboard";
+import Control from "./containers/control";
+import Userprofile from "./containers/userprofile";
 
 // import RegisterPage from "./containers/register";
 import useAuth from "./firebase/Status";
@@ -46,8 +48,11 @@ const LogInAdmin = () =>{
 const AdminIsLogin = ({ data }) => {
   return (
     <Router>
+    {/* Userprofile */}
       <Routes>
         <Route path="/" element={<DashboardPage/>}/>
+        <Route path="/user-profile" element={<Userprofile/>}/>
+        <Route path="/control" element={<Control/>}/>
         <Route path="*" element={<Navigate to="/"/>}/>
       </Routes>
     </Router>

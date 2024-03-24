@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Dashboard.css'; // Import CSS file
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Dashboard = () => {
@@ -13,10 +13,10 @@ const Dashboard = () => {
     email: '',
     phoneNumber: ''
   });
-  const history = useHistory(); // Initialize useHistory hook
+  const history = useNavigate(); // Initialize useHistory hook
 
   const handleNavigation = (path) => {
-    history.push(path);
+    history(path);
   };
 
   const handleLogout = () => {

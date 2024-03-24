@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import './control.css'; // Assuming the CSS changes are saved here
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Control = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const history = useHistory();
+  const history = useNavigate();
 
   const handleNavigation = (path) => {
-    history.push(path);
+    history(path);
   };
 
   const toggleDarkMode = () => {

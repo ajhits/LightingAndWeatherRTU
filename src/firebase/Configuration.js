@@ -11,6 +11,7 @@ import { getStorage  } from "firebase/storage";
 const firebaseConfig = {
   apiKey: "AIzaSyAf0T76wl4Xil88rTg7sLX0wN3_AXzay6Q",
   authDomain: "ai-smart-classroom.firebaseapp.com",
+  databaseURL: "https://ai-smart-classroom-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "ai-smart-classroom",
   storageBucket: "ai-smart-classroom.appspot.com",
   messagingSenderId: "717041352251",
