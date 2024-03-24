@@ -58,7 +58,7 @@ const menuContent = (
         className="p-d-flex p-ai-center"
         activeClassName="active"
       >
-        {item.iconType == "component" && item.icon}
+        {item.iconType === "component" && item.icon}
         <span className="ml-2 menuText">{item.name}</span>
       </NavLink>
     ))}

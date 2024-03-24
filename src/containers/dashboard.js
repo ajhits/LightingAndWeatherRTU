@@ -6,7 +6,7 @@ import { LogoutSession } from '../firebase/Authentication';
 import { getHistory } from '../firebase/Database';
 
 const Dashboard = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode] = useState(false);
   const [History,setHistory] = useState([])
   const [Enter,setEnter] = useState([])
   const [Exit,setExit] = useState([])
@@ -35,7 +35,7 @@ const Dashboard = () => {
         setEnter(filtered(data,today,'person in'))
         setExit(filtered(data,today,'person out'))
       })
-  },[])
+  },[today])
 
   const handleNavigation = (path) => {
     history(path);
@@ -50,9 +50,9 @@ const Dashboard = () => {
     history('/user-profile');
   };
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  // const toggleDarkMode = () => {
+  //   setIsDarkMode(!isDarkMode);
+  // };
 
   return (
     <div className={`dashboard-container ${isDarkMode ? 'dark-mode' : ''}`}>
@@ -61,9 +61,9 @@ const Dashboard = () => {
         <button className="account-icon" onClick={goToSettings}>
           <i className="fas fa-user"></i>
         </button>
-        <button className="mode-toggle" onClick={toggleDarkMode}>
+        {/* <button className="mode-toggle" onClick={toggleDarkMode}>
           {isDarkMode ? 'Light Mode' : 'Dark Mode'}
-        </button>
+        </button> */}
         <button className="control-btn" onClick={() => handleNavigation('/control')}>
           Controls
         </button>
@@ -74,11 +74,14 @@ const Dashboard = () => {
 
       {/* Central Components */}
       <div className="central-components">
+
         {/* User Info */}
-        <div className="info-box">
+        {/* <div className="info-box">
           <h2>User</h2>
           <p>John Doe</p>
-        </div>
+        </div> */}
+
+        
         {/* Enter Info */}
         <div className="info-box">
           <h2>Enter</h2>

@@ -4,7 +4,7 @@ import "../assets/css/header.css";
 
 import Logo from "../assets/images/logo.png";
 import Avatar from "../assets/images/avatar.jpg";
-import { DashboardIcon } from "../assets/icons";
+// import { DashboardIcon } from "../assets/icons";
 
 import { useDispatch } from "react-redux";
 import { openSideBar } from "../library/store/sidebar";

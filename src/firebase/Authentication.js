@@ -1,20 +1,5 @@
-// import { 
-//     EmailAuthProvider, 
-//     onAuthStateChanged, 
-//     reauthenticateWithCredential, 
-//     sendPasswordResetEmail, 
-//     updatePassword,
-//     setPersistence, 
-//     signInWithEmailAndPassword, 
-//     browserLocalPersistence,
-//     signOut,
-//     // createUserWithEmailAndPassword,
-//     deleteUser,
-// } from "@firebase/auth";
 import { EmailAuthProvider, browserLocalPersistence, onAuthStateChanged, reauthenticateWithCredential, sendPasswordResetEmail, setPersistence, signInWithEmailAndPassword, signOut, updatePassword } from "firebase/auth";
 import { auth } from "./Configuration";
-
-
 
 // check the login status
 export const statusLogin = () => {
@@ -44,7 +29,8 @@ export const changing_password = (CurrentPass = null, NewPassword = null) => {
         .then(() => {
           updatePassword(auth.currentUser, NewPassword)
             .then(() => {
-              console.log("Password changed successfully");
+              alert("Password changed successfully please login again");
+              LogoutSession()
               resolve({
                 oldPassword: false,
                 oldPasswordMessage: "Invalid password",
@@ -53,8 +39,8 @@ export const changing_password = (CurrentPass = null, NewPassword = null) => {
               });
             })
             .catch((error) => {
-              console.error("Error updating password:");
-              resolve({
+              alert("Error updating password:");
+              reject({
                 oldPassword: true,
                 oldPasswordMessage: "",
                 newPassword: true,
@@ -135,7 +121,6 @@ export const LoginSession = (user) => {
     });
   };
 
-
   // Logout
 export const LogoutSession = async () => {
     await signOut(auth).then(()=>{
@@ -172,51 +157,3 @@ export const LogoutSession = async () => {
 //         });
 //     });
 //   };
-
-
-  // update Password
-  export const updatePasswords = async (oldPassword,newPassword) => {
-    return new Promise((resolve, reject) => {
-      const credential = EmailAuthProvider.credential(auth.currentUser.email, oldPassword);
-  
-      reauthenticateWithCredential(auth.currentUser, credential)
-        .then((e) => {
-  
-          updatePassword(auth.currentUser, newPassword).then(() => {
-            // Update successful.\
-  
-            alert("Password updated please login again!")
-            LogoutSession()
-
-            window.location.reload()
-  
-  
-            resolve("password updated!")
-          }).catch((error) => {
-            // An error ocurred
-            // ...
-
-            console.log(error)
-            reject({
-              oldPassword: true,
-              oldPasswordMessage: "Invalid Pasword",
-              newPassword: true,
-              newPasswordMessage: ""
-            });
-
-          });
-    
-        })
-      .catch((error) => {
-
-          console.log(error)
-          reject({
-            oldPassword: true,
-            oldPasswordMessage: "Invalid Pasword",
-            newPassword: true,
-            newPasswordMessage: ""
-          });
-        });
-    });
-  }
-

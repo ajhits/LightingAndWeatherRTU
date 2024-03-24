@@ -1,0 +1,34 @@
+[debug] [2024-03-24T15:34:37.800Z] ----------------------------------------------------------------------
+[debug] [2024-03-24T15:34:37.803Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\lisbo\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2024-03-24T15:34:37.804Z] CLI Version:   13.4.0
+[debug] [2024-03-24T15:34:37.804Z] Platform:      win32
+[debug] [2024-03-24T15:34:37.804Z] Node Version:  v20.10.0
+[debug] [2024-03-24T15:34:37.804Z] Time:          Sun Mar 24 2024 23:34:37 GMT+0800 (Singapore Standard Time)
+[debug] [2024-03-24T15:34:37.804Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-03-24T15:34:37.808Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-03-24T15:34:38.020Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-03-24T15:34:38.021Z] > authorizing via signed-in user (lisboamillen30@gmail.com)
+[debug] [2024-03-24T15:34:38.021Z] [iam] checking project ai-smart-classroom for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2024-03-24T15:34:38.022Z] > refreshing access token with scopes: []
+[debug] [2024-03-24T15:34:38.024Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-03-24T15:34:38.024Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-03-24T15:34:38.302Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-03-24T15:34:38.302Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-03-24T15:34:38.319Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-smart-classroom:testIamPermissions [none]
+[debug] [2024-03-24T15:34:38.319Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-smart-classroom:testIamPermissions x-goog-quota-user=projects/ai-smart-classroom
+[debug] [2024-03-24T15:34:38.319Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-smart-classroom:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2024-03-24T15:34:38.401Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-03-24T15:34:38.401Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-03-24T15:34:39.404Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-smart-classroom:testIamPermissions 200
+[debug] [2024-03-24T15:34:39.405Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/ai-smart-classroom:testIamPermissions {}
+[debug] [2024-03-24T15:34:39.405Z] [iam] error while checking permissions, command may fail: FirebaseError: Authorization failed. This account is missing the following required permissions on project ai-smart-classroom:
+
+  firebase.projects.get
+  firebasehosting.sites.update
+[debug] [2024-03-24T15:34:39.406Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ai-smart-classroom [none]
+[debug] [2024-03-24T15:34:39.851Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ai-smart-classroom 403
+[debug] [2024-03-24T15:34:39.851Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ai-smart-classroom {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2024-03-24T15:34:39.853Z] HTTP Error: 403, The caller does not have permission
+[error] 
+[error] Error: Assertion failed: resolving hosting target of a site with no site name or target name. This should have caused an error earlier

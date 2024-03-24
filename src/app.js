@@ -51,9 +51,9 @@ const AdminIsLogin = ({ data }) => {
     {/* Userprofile */}
       <Routes>
         <Route path="/" element={<DashboardPage/>}/>
-        <Route path="/user-profile" element={<Userprofile/>}/>
+        <Route path="/user-profile" element={<Userprofile data={data}/>}/>
         <Route path="/control" element={<Control/>}/>
-        <Route path="*" element={<Navigate to="/"/>}/>
+        <Route path="*" element={<Navigate to="/" />}/>
       </Routes>
     </Router>
   )

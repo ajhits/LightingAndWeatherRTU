@@ -1,18 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Dashboard.css'; // Import CSS file
 import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { getUserDetails } from '../firebase/Firestore';
+import { changing_password } from '../firebase/Authentication';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [userData, setUserData] = useState({
-    username: 'John Doe',
     currentPassword: '',
     newPassword: '',
     retypeNewPassword: '',
-    email: '',
-    phoneNumber: ''
   });
+
+  const [details, setDetails] = useState({
+    name: 'John Doe',
+    email: 'test@gmail.com',
+    phoneNumber: '+63 934569310'
+  });
+
   const history = useNavigate(); // Initialize useHistory hook
 
   const handleNavigation = (path) => {
@@ -23,12 +29,12 @@ const Dashboard = () => {
     // Implement your logout logic here
     console.log('Logging out...');
     // Redirect to login page
-    history.push('/login');
+    history('/login');
   };
 
   const goToSettings = () => {
     // Redirect to settings page
-    history.push('/settings');
+    history('/settings');
   };
 
   const toggleDarkMode = () => {
@@ -45,7 +51,26 @@ const Dashboard = () => {
     e.preventDefault();
     // Implement logic to submit user profile data
     console.log('Submitting user profile data:', userData);
+
+    changing_password(
+  userData.currentPassword,
+      userData.newPassword
+    )
+    .then(data=>console.log(data))
   };
+
+  useEffect(()=>{
+    getUserDetails(props.data)
+    .then(data=>{
+      setDetails({
+        name: data.name,
+        email: data.email,
+        phoneNumber: data.phone
+      })
+
+    })
+    .catch(error=>console.log(error))
+  },[props.data])
 
   return (
     <div className={`dashboard-container ${isDarkMode ? 'dark-mode' : ''}`}>
@@ -68,38 +93,34 @@ const Dashboard = () => {
       {/* User Info */}
       <div className="user-info">
         <div className="info-box">
-          <h2>User</h2>
-          <p>{userData.username}</p>
+          <h2>{details.name}</h2>
+          <p>{details.email}</p>
+          <p>{details.phoneNumber}</p>    
         </div>
+
       </div>
+
 
       {/* User Profile Form */}
       <form className="user-profile-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Username:</label>
-          <input type="text" name="username" value={userData.username} onChange={handleChange} />
-        </div>
+
         <div className="form-group">
           <label>Current Password:</label>
           <input type="password" name="currentPassword" value={userData.currentPassword} onChange={handleChange} />
         </div>
+
         <div className="form-group">
           <label>New Password:</label>
           <input type="password" name="newPassword" value={userData.newPassword} onChange={handleChange} />
         </div>
+
         <div className="form-group">
           <label>Retype New Password:</label>
           <input type="password" name="retypeNewPassword" value={userData.retypeNewPassword} onChange={handleChange} />
         </div>
-        <div className="form-group">
-          <label>Email:</label>
-          <input type="email" name="email" value={userData.email} onChange={handleChange} />
-        </div>
-        <div className="form-group">
-          <label>Phone Number:</label>
-          <input type="text" name="phoneNumber" value={userData.phoneNumber} onChange={handleChange} />
-        </div>
-        <button type="submit">Save</button>
+
+
+        <button type="submit">save password</button>
       </form>
     </div>
   );
