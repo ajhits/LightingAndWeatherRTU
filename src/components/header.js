@@ -12,10 +12,10 @@ import { Badge } from "primereact/badge";
 
 import { Menu } from "primereact/menu";
 import { OverlayPanel } from "primereact/overlaypanel";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
-  const history = useHistory();
+  const history = useNavigate();
   const userMenuRef = useRef(null);
   const notificationRef = useRef(null);
 

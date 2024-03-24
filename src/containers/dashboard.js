@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import './Dashboard.css'; // Import CSS file
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const Dashboard = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const history = useHistory(); // Initialize useHistory hook
+  const history = useNavigate(); // Initialize useNavigate hook
 
   const handleNavigation = (path) => {
     history.push(path);

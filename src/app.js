@@ -1,42 +1,57 @@
 import React from "react";
 import LoginPage from "./containers/login";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { PrivateRoute } from "./library/helper";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 
-import ToastManager from "./components/toast";
+// import ToastManager from "./components/toast";
 
 
 // pages
 import DashboardPage from "./containers/dashboard";
-import RegisterPage from "./containers/register";
-import ForgotpasswordPage from "./containers/forgotpassword";
-import ChangepasswordPage from "./containers/changepassword";
-import NotfoundPage from "./containers/notfound";
-import UserProfilePage from "./containers/userprofile";
-import control from "./containers/control";
+
+// import RegisterPage from "./containers/register";
+import useAuth from "./firebase/Status";
+// import ForgotpasswordPage from "./containers/forgotpassword";
+// import ChangepasswordPage from "./containers/changepassword";
+// import NotfoundPage from "./containers/notfound";
+// import UserProfilePage from "./containers/userprofile";
+
 
 
 function App() {
+  const { user,data } = useAuth();
   return (
     <>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={LoginPage} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/register" component={RegisterPage} />
-          <Route exact path="/forgot-password" component={ForgotpasswordPage} />
-          <Route exact path="/change-password" component={ChangepasswordPage} />
-          <Route exact path="/dashboard" component={DashboardPage} />
-          <Route exact path="/user-profile" component={UserProfilePage} />
-          <Route exact path="/control" component={control} />
-          <Route path="*" component={NotfoundPage} />
-        </Switch>
-      </Router>
-      
-      <ToastManager />
+
+        {user === "login" && <LogInAdmin  /> }
+        {user === "panel" && <AdminIsLogin data={data}/> }
+
     </>
   );
+}
+
+// user need to Login
+const LogInAdmin = () =>{
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginPage/>}/>
+        <Route path="*" element={<Navigate to="/"/>}/>
+      </Routes>
+    </Router>
+  )
+}
+
+// user is already Login
+const AdminIsLogin = ({ data }) => {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<DashboardPage/>}/>
+        <Route path="*" element={<Navigate to="/"/>}/>
+      </Routes>
+    </Router>
+  )
 }
 
 export default App;
