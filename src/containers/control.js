@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 
 const Control = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [buttonStates, setButtonStates] = useState({
+    button1: false,
+    button2: false,
+    button3: false,
+    button4: false
+  });
   const history = useNavigate();
 
   const handleNavigation = (path) => {
@@ -12,6 +18,10 @@ const Control = () => {
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
+  };
+
+  const toggleButton = (button) => {
+    setButtonStates({ ...buttonStates, [button]: !buttonStates[button] });
   };
 
   return (
@@ -30,18 +40,37 @@ const Control = () => {
         <button className="logout-button" onClick={() => handleNavigation('/login')}>
           Logout
         </button>
-        
       </div>
 
       {/* Button Controls */}
       <div className="central-components">
-        <button className="button-1" onClick={() => handleNavigation('/page1')}>Button 1</button>
-        <button className="button-2" onClick={() => handleNavigation('/page2')}>Button 2</button>
-        <button className="button-3" onClick={() => handleNavigation('/page3')}>Button 3</button>
-        <button className="button-4" onClick={() => handleNavigation('/page4')}>Button 4</button>
+        <button
+          className={`button-1 ${buttonStates.button1 ? 'active' : ''}`}
+          onClick={() => toggleButton('button1')}
+        >
+          {buttonStates.button1 ? 'On' : 'Off'}
+        </button>
+        <button
+          className={`button-2 ${buttonStates.button2 ? 'active' : ''}`}
+          onClick={() => toggleButton('button2')}
+        >
+          {buttonStates.button2 ? 'On' : 'Off'}
+        </button>
+        <button
+          className={`button-3 ${buttonStates.button3 ? 'active' : ''}`}
+          onClick={() => toggleButton('button3')}
+        >
+          {buttonStates.button3 ? 'On' : 'Off'}
+        </button>
+        <button
+          className={`button-4 ${buttonStates.button4 ? 'active' : ''}`}
+          onClick={() => toggleButton('button4')}
+        >
+          {buttonStates.button4 ? 'On' : 'Off'}
+        </button>
       </div>
 
-        <br></br><br></br>
+      <br></br><br></br>
       {/* Table Component */}
       <h2 className="table-name">Daily Record</h2>
       <table className="data-table">
@@ -63,7 +92,6 @@ const Control = () => {
         </tbody>
       </table>
     </div>
-    
   );
 };
 
