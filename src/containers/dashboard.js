@@ -7,6 +7,10 @@ const Dashboard = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const history = useHistory(); // Initialize useHistory hook
 
+  const handleNavigation = (path) => {
+    history.push(path);
+  };
+
   const handleLogout = () => {
     // Implement your logout logic here
     console.log('Logging out...');
@@ -16,7 +20,7 @@ const Dashboard = () => {
 
   const goToSettings = () => {
     // Redirect to settings page
-    history.push('/settings');
+    history.push('/user-profile');
   };
 
   const toggleDarkMode = () => {
@@ -32,6 +36,9 @@ const Dashboard = () => {
         </button>
         <button className="mode-toggle" onClick={toggleDarkMode}>
           {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
+        <button className="control-btn" onClick={() => handleNavigation('/control')}>
+          Controls
         </button>
         <button className="logout-button" onClick={handleLogout}>
           Logout

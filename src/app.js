@@ -14,6 +14,7 @@ import ForgotpasswordPage from "./containers/forgotpassword";
 import ChangepasswordPage from "./containers/changepassword";
 import NotfoundPage from "./containers/notfound";
 import UserProfilePage from "./containers/userprofile";
+import control from "./containers/control";
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route exact path="/change-password" component={ChangepasswordPage} />
           <Route exact path="/dashboard" component={DashboardPage} />
           <Route exact path="/user-profile" component={UserProfilePage} />
+          <Route exact path="/control" component={control} />
           <Route path="*" component={NotfoundPage} />
         </Switch>
       </Router>
