@@ -108,7 +108,7 @@ const Dashboard = () => {
         </thead>
         <tbody>
           {/* Example row */}
-          {Object.values(History).map((value,key)=>(
+          {Object.values(History).filter(data=> data.date === String(today).replace(",","")).map((value,key)=>(
             <tr key={key}>
             <td>{key}</td>
             <td>{value.person_status}</td>

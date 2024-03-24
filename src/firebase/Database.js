@@ -1,4 +1,4 @@
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, set } from "firebase/database";
 import { database } from "./Configuration";
 
 export const getHistory = async () => {
@@ -19,4 +19,16 @@ export const getHistory = async () => {
         }
 
     })
+}
+
+// **************** Open the Locker **************** //
+export const updateRelay = async (props) => {
+    try {
+        const keyRef = ref(database, `relay/${props.relay}/`);
+        
+        set(keyRef,props.value);
+ 
+    } catch (err) {
+        console.error(err);
+    }
 }
