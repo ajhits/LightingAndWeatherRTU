@@ -8,15 +8,16 @@ import "../assets/css/login.css";
 import * as Yup from "yup";
 import { useFormik, Form, FormikProvider } from "formik";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { CheckToken } from "../library/helper";
-import { authenticateUser } from "../library/store/authentication";
-import { useDispatch } from "react-redux";
+import { LoginSession } from "../firebase/Authentication";
+// import { authenticateUser } from "../library/store/authentication";
+// import { useDispatch } from "react-redux";
 
 export default function LoginPage() {
-  const history = useHistory();
-  const dispatch = useDispatch();
+  const history = useNavigate();
+  // const dispatch = useDispatch();
 
   const LoginSchema = Yup.object().shape({
     userid: Yup.string().required("name is required"),
@@ -27,17 +28,27 @@ export default function LoginPage() {
     if (CheckToken()) {
       history.push("/dashboard");
     }
-  }, []);
+  }, [history]);
 
   const formik = useFormik({
     initialValues: {
       userid: "",
       password: "",
     },
+
     validationSchema: LoginSchema,
     onSubmit: (data) => {
-      console.log(data);
-      dispatch(authenticateUser(data));
+      console.log(data.userid);
+      console.log(data.password);
+
+      LoginSession({
+        email: data.userid,
+        password: data.password
+      }).then(data=>window.location.reload()).catch(error=>{
+        console.log(error)
+        alert("Login Failed")
+      })
+
 
       setTimeout(() => {
         formik.setSubmitting(false);

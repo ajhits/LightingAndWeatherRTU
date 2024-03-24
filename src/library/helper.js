@@ -1,4 +1,4 @@
-import { Route, Redirect } from "react-router-dom";
+import { Route, Navigate } from "react-router-dom";
 import LayoutPage from "../components/layout";
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -10,7 +10,7 @@ export const PrivateRoute = ({ component: Component, ...rest }) => (
           <Component {...props} />
         </LayoutPage>
       ) : (
-        <Redirect to="/login" />
+        <Navigate to="/login" />
       )
     }
   />
