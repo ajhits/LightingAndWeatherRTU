@@ -1,0 +1,92 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.account-icon {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+}
+
+.mode-toggle, .control-btn, .logout-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    padding: 10px 16px;
+    margin-left: 10px;
+}
+
+.control-btn, .logout-button {
+    background-color: #EA4C89;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.control-btn:hover, .logout-button:hover {
+    background-color: #F082AC;
+}
+
+.dark-mode .control-btn, .dark-mode .logout-button {
+    background-color: #5C7AEA;
+}
+
+.dark-mode .control-btn:hover, .dark-mode .logout-button:hover {
+    background-color: #809BFF;
+}
+
+.button-1, .button-2, .button-3, .button-4 {
+    background-color: #EA4C89;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    margin-top: 10px;
+    width: calc(25% - 20px); /* Make buttons 25% width with margin */
+    margin-right: 20px; /* Add margin between buttons */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.button-1:hover, .button-2:hover, .button-3:hover, .button-4:hover {
+    background-color: #F082AC;
+}
+
+.dark-mode .button-1, .dark-mode .button-2, .dark-mode .button-3, .dark-mode .button-4 {
+    background-color: #5C7AEA;
+}
+
+.dark-mode .button-1:hover, .dark-mode .button-2:hover, .dark-mode .button-3:hover, .dark-mode .button-4:hover {
+    background-color: #809BFF;
+}
+
+/* Media Query for Mobile Devices */
+@media only screen and (max-width: 768px) {
+    .button-1, .button-2, .button-3, .button-4 {
+        width: calc(50% - 20px); /* Make buttons 50% width with margin */
+        margin-right: 20px; /* Add margin between buttons */
+    }
+}

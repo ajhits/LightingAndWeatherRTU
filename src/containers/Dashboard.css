@@ -1,12 +1,12 @@
 .dashboard-container {
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
 }
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end; 
   align-items: center;
   margin-bottom: 20px;
 }
@@ -17,6 +17,7 @@
   cursor: pointer;
   font-size: 24px;
   color: #333;
+  margin-right: auto;
 }
 
 .mode-toggle {
@@ -25,6 +26,27 @@
   cursor: pointer;
   font-size: 16px;
   color: #333;
+  /* Apply button design */
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: #EA4C89;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease;
+}
+
+.mode-toggle:hover,
+.mode-toggle:focus {
+  background-color: #F082AC;
+}
+
+/* Adjusted for dark mode */
+.dark-mode .mode-toggle {
+  background-color: #5C7AEA;
+}
+
+.dark-mode .mode-toggle:hover,
+.dark-mode .mode-toggle:focus {
+  background-color: #809BFF;
 }
 
 .central-components {
@@ -109,6 +131,7 @@
   background-color: #333;
   color: #fff;
 }
+
 .table-name {
   font-size: 24px;
   margin-bottom: 20px;
@@ -117,5 +140,63 @@
 
 .dark-mode .table-name {
   color: #fff; /* Color for dark mode */
+}
+
+.control-btn{
+  background-color: #EA4C89;
+    border-radius: 8px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    height: 40px;
+    line-height: 20px;
+    margin-top: 10px;
+    transition: background-color 0.3s, color 0.3s;
+}
+.user-profile-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.user-profile-form .form-group {
+  margin-bottom: 20px;
+}
+
+.user-profile-form label {
+  display: block;
+  font-weight: bold;
+}
+
+.user-profile-form input[type="text"],
+.user-profile-form input[type="password"],
+.user-profile-form input[type="email"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.user-profile-form button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.user-profile-form button[type="submit"]:hover {
+  background-color: #0056b3;
 }
 

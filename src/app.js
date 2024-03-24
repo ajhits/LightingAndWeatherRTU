@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 
 // pages
 import DashboardPage from "./containers/dashboard";
+
 // import RegisterPage from "./containers/register";
 import useAuth from "./firebase/Status";
 // import ForgotpasswordPage from "./containers/forgotpassword";
@@ -16,12 +17,15 @@ import useAuth from "./firebase/Status";
 // import UserProfilePage from "./containers/userprofile";
 
 
+
 function App() {
   const { user,data } = useAuth();
   return (
     <>
+
         {user === "login" && <LogInAdmin  /> }
         {user === "panel" && <AdminIsLogin data={data}/> }
+
     </>
   );
 }
