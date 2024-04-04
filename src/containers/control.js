@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './control.css'; // Assuming the CSS changes are saved here
 import { useNavigate } from 'react-router-dom';
 import { getHistory, updateRelay } from '../firebase/Database';
+import axios from 'axios';
 
 const Control = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -11,18 +12,65 @@ const Control = () => {
     button3: false,
     button4: false
   });
-  const [History,setHistory] = useState([])
+  const [History,setHistory] = useState([]);
+  const [currentTime, setCurrentTime] = useState('');
+  const [todayDate, setTodayDate] = useState('');
+  const [temperature, setTemperature] = useState(34.4);
   const history = useNavigate();
 
   useEffect(()=>{
 
+    // History
+    getHistory().then(data=>{
+    
+      setHistory(Object.values(data));
+    });
 
-    getHistory()
-      .then(data=>{
-        setHistory(Object.values(data))
-     
+    // date
+    const intervalId = setInterval(() => {
+
+      const currentHour = new Date().getHours();
+      if (currentHour >= 17) {
+        console.log("Lights on");
+
+        // updateRelay({
+        //   relay: 6,
+        //   value: true
+        // });
+
+        // setButtonStates({ ...buttonStates, button1: true }); 
+
+      } 
+      setCurrentTime(new Date().toLocaleTimeString());
+    }, 1000);
+    setTodayDate(new Date().toLocaleDateString());
+
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=14.5905&lon=121.1040&appid=68d66ae5bea72e2ae26bb322cd719393`;
+
+    axios.get(apiUrl)
+      .then(response => {
+
+        const data = response.data;
+        const temperature = Math.round(data.main.temp - 273.15);
+        console.log(temperature)
+        setTemperature(temperature);
+
+        if (temperature >= 34){
+          console.log("Fan On")
+          // updateRelay({
+          //   relay: 13,
+          //   value: !buttonStates['button2'] 
+          // });
+
+          // setButtonStates({ ...buttonStates, button2: !buttonStates['button2'] }); 
+        }
       })
-  },[])
+      .catch(error => {
+        console.error('Error fetching weather data:', error);
+      });
+
+    return () => clearInterval(intervalId);
+  },[]);
 
   const handleNavigation = (path) => {
     history(path);
@@ -33,28 +81,27 @@ const Control = () => {
   };
 
   const toggleButton = (button,relay) => {
-   Object.entries(getDataByDate(History)).map((date, index)=>console.log(date[0],date[1]))
+  
     setButtonStates({ ...buttonStates, [button]: !buttonStates[button] });
     updateRelay({
       relay: relay,
       value: !buttonStates[button]
-    })
+    });
   };
 
-  
-const getDataByDate = (data) => {
-  const dates = {};
-  // Iterate through the data to collect unique dates and count entries for each date
-  Object.values(data).forEach(entry => {
-    const date = entry.date;
-    if (!dates[date]) {
-      dates[date] = 1;
-    } else {
-      dates[date]++;
-    }
-  });
-  return dates;
-};
+  const getDataByDate = (data) => {
+    const dates = {};
+    // Iterate through the data to collect unique dates and count entries for each date
+    Object.values(data).forEach(entry => {
+      const date = entry.date;
+      if (!dates[date]) {
+        dates[date] = 1;
+      } else {
+        dates[date]++;
+      }
+    });
+    return dates;
+  };
 
   return (
     <div className={`dashboard-container ${isDarkMode ? 'dark-mode' : ''}`}>
@@ -78,15 +125,15 @@ const getDataByDate = (data) => {
       <div className="central-components">
         <button
           className={`button-1 ${buttonStates.button1 ? 'active' : ''}`}
-          onClick={() => toggleButton('button1','6')}
+          onClick={e =>{ e.preventDefault(); toggleButton('button1','6'); } }
         >
-          {buttonStates.button1 ? 'On' : 'Off'}
+          {buttonStates.button1 ? 'Lights On' : ' Lights Off'}
         </button>
         <button
           className={`button-2 ${buttonStates.button2 ? 'active' : ''}`}
-          onClick={() => toggleButton('button2','13')}
+          onClick={e =>{ e.preventDefault(); toggleButton('button2','13'); }}
         >
-          {buttonStates.button2 ? 'On' : 'Off'}
+          {buttonStates.button2 ? 'Fan On' : 'Fan Off'}
         </button>
         <button
           className={`button-3 ${buttonStates.button3 ? 'active' : ''}`}
@@ -101,28 +148,35 @@ const getDataByDate = (data) => {
           {buttonStates.button4 ? 'On' : 'Off'}
         </button>
       </div>
+      <br></br>
+      {/* Display Text for Time, Date, and Temperature */}
+      <div>
+        <p>Current Time: {currentTime}</p>
+        <p>Today's Date: {todayDate}</p>
+        <p>Temperature: {temperature}</p>
+      </div>
 
-      <br></br><br></br>
+      <br/><br/>
       {/* Table Component */}
       <h2 className="table-name">Daily Record</h2>
       <table className="data-table">
         <thead>
           <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>Enter Count</th>
             <th>Date</th>
+         
           </tr>
         </thead>
         <tbody>
           {/* Example row */}
-
-          {  Object.entries(getDataByDate(History)).map((data, index) => (
-          <tr key={index}>
-            <td>{index}</td>
-            <td>{data[1]}</td>
-            <td>{data[0]}</td>
-          </tr>
-        ))}
+          {Object.entries(getDataByDate(History)).map((data, index) => (
+            <tr key={index}>
+              <td>{index}</td>
+              <td>{data[1]}</td>
+              <td>{data[0]}</td>
+            </tr>
+          ))}
           {/* Add more rows as needed */}
         </tbody>
       </table>

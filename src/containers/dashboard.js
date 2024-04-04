@@ -19,19 +19,28 @@ const Dashboard = () => {
     });
   } 
 
-          // Filter data based on today's date and person_status being "person out"
-          const today = new Date().toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          });
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit', // Ensure the day is represented with two digits
+  });
+  
+  // Adjusting the date format to remove comma and add leading zero if necessary
+  const formattedToday = today.replace(",", "").replace(/\b(\d{1})\b/g, "0$1");
+  
+  console.log(formattedToday); // Output: "April 01 2024"
+  
+
   useEffect(()=>{
 
 
     getHistory()
       .then(data=>{
-        setHistory(Object.values(data))
-        console.log(today)
+        
+
+        // const filteredData = Object.values(data).filter(entry => String(entry.date) === String(today).replace(",",""));
+        // console.log("Filtered data:", filteredData); 
+        setHistory(data)
         setEnter(filtered(data,today,'person in'))
         setExit(filtered(data,today,'person out'))
       })
@@ -107,15 +116,19 @@ const Dashboard = () => {
             <th>ID</th>
             <th>Status</th>
             <th>Date</th>
+            <th>Time</th>
           </tr>
         </thead>
         <tbody>
           {/* Example row */}
-          {Object.values(History).filter(data=> data.date === String(today).replace(",","")).map((value,key)=>(
+          {Object.values(History)
+          .filter(data=> data.date === String(today).replace(",",""))
+          .map((value,key)=>(
             <tr key={key}>
             <td>{key}</td>
             <td>{value.person_status}</td>
             <td>{value.date}</td>
+            <td>{value.time}</td>
           </tr>
           ))}
  
