@@ -20,6 +20,9 @@ const Control = () => {
 
   useEffect(()=>{
 
+    let isLightsOn = false;
+    let isFanOn = false;
+    
     // History
     getHistory().then(data=>{
     
@@ -30,17 +33,19 @@ const Control = () => {
     const intervalId = setInterval(() => {
 
       const currentHour = new Date().getHours();
-      if (currentHour >= 17) {
+      if (!isLightsOn && currentHour >= 17) {
         console.log("Lights on");
 
-        // updateRelay({
-        //   relay: 6,
-        //   value: true
-        // });
+        updateRelay({
+          relay: 6,
+          value: true
+        });
 
-        // setButtonStates({ ...buttonStates, button1: true }); 
+        setButtonStates({ ...buttonStates, button1: true }); 
+        isLightsOn = true; // Update state variable
 
       } 
+      
       setCurrentTime(new Date().toLocaleTimeString());
     }, 1000);
     setTodayDate(new Date().toLocaleDateString());
@@ -55,14 +60,15 @@ const Control = () => {
         console.log(temperature)
         setTemperature(temperature);
 
-        if (temperature >= 34){
+        if (!isFanOn && temperature >= 34){
           console.log("Fan On")
-          // updateRelay({
-          //   relay: 13,
-          //   value: !buttonStates['button2'] 
-          // });
+          updateRelay({
+            relay: 13,
+            value: !buttonStates['button2'] 
+          });
 
-          // setButtonStates({ ...buttonStates, button2: !buttonStates['button2'] }); 
+          setButtonStates({ ...buttonStates, button2: !buttonStates['button2'] }); 
+          isFanOn = true;
         }
       })
       .catch(error => {
