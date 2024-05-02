@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './control.css'; // Assuming the CSS changes are saved here
 import { useNavigate } from 'react-router-dom';
-import { getHistory, updateRelay } from '../firebase/Database';
+import { getHistory, getTimer, setTimer, updateRelay } from '../firebase/Database';
 import axios from 'axios';
 
 const Control = () => {
@@ -10,7 +10,8 @@ const Control = () => {
     button1: false,
     button2: false,
     button3: false,
-    button4: false
+    button4: false,
+    button5: false
   });
   const [History,setHistory] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
@@ -20,33 +21,33 @@ const Control = () => {
 
   useEffect(()=>{
 
-    let isLightsOn = false;
-    let isFanOn = false;
-    
+   
     // History
     getHistory().then(data=>{
     
       setHistory(Object.values(data));
     });
 
+
     // date
-    const intervalId = setInterval(() => {
+    const intervalId = setInterval(async () => {
 
-      const currentHour = new Date().getHours();
-      if (!isLightsOn && currentHour >= 17) {
-        console.log("Lights on");
-
-        updateRelay({
-          relay: 6,
-          value: true
-        });
-
-        setButtonStates({ ...buttonStates, button1: true }); 
-        isLightsOn = true; // Update state variable
-
-      } 
-      
       setCurrentTime(new Date().toLocaleTimeString());
+
+      getTimer().then(data=>{
+        if (data){
+          setButtonStates({ ...buttonStates, button1: true, button2: true, button5: data });
+
+        }
+      })
+
+
+      // const Light = await getRelay("6");
+      // const Fan = await getRelay("13");
+
+      // setButtonStates({ ...buttonStates, button1: Light });
+      // setButtonStates({ ...buttonStates, button2: Fan });
+
     }, 1000);
     setTodayDate(new Date().toLocaleDateString());
 
@@ -57,19 +58,10 @@ const Control = () => {
 
         const data = response.data;
         const temperature = Math.round(data.main.temp - 273.15);
-        console.log(temperature)
+
         setTemperature(temperature);
 
-        if (!isFanOn && temperature >= 34){
-          console.log("Fan On")
-          updateRelay({
-            relay: 13,
-            value: !buttonStates['button2'] 
-          });
 
-          setButtonStates({ ...buttonStates, button2: !buttonStates['button2'] }); 
-          isFanOn = true;
-        }
       })
       .catch(error => {
         console.error('Error fetching weather data:', error);
@@ -94,6 +86,8 @@ const Control = () => {
       value: !buttonStates[button]
     });
   };
+
+
 
   const getDataByDate = (data) => {
     const dates = {};
@@ -152,6 +146,17 @@ const Control = () => {
           onClick={() => toggleButton('button4','26')}
         >
           {buttonStates.button4 ? 'On' : 'Off'}
+        </button>
+
+        <button
+          className={`button-4 ${buttonStates.button5 ? 'active' : ''}`}
+          onClick={() =>{
+            setTimer({
+              timer: !buttonStates.button5})
+            setButtonStates({ ...buttonStates, button5: !buttonStates.button5 });
+          }}
+        >
+          {buttonStates.button5 ? 'Timer is ON' : 'Timer is OFF'}
         </button>
       </div>
       <br></br>
