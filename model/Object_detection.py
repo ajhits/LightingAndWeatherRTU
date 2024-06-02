@@ -14,18 +14,25 @@ class ObjectDetector:
 
     def visualize_callback(self, result: vision.ObjectDetectorResult,
                            output_image: mp.Image, timestamp_ms: int):
-        result.timestamp_ms = timestamp_ms
-        self.detection_result_list.append(result)
+        
+        try:
+            result.timestamp_ms = timestamp_ms
+            self.detection_result_list.append(result)
+        except Exception as e:
+            print("Object - visualize_callback(): ",e)
 
     def run(self):
         
-        # Initialize the object detection model
-        base_options = python.BaseOptions(model_asset_path=self.model)
-        options = vision.ObjectDetectorOptions(base_options=base_options,
+        try:
+            # Initialize the object detection model
+            base_options = python.BaseOptions(model_asset_path=self.model)
+            options = vision.ObjectDetectorOptions(base_options=base_options,
                                                running_mode=vision.RunningMode.LIVE_STREAM,
                                                score_threshold=0.7,
                                                result_callback=self.visualize_callback)
-        self.detector = vision.ObjectDetector.create_from_options(options)
+            self.detector = vision.ObjectDetector.create_from_options(options)
+        except Exception as e:
+            print("Object - run(): ",e)
 
     def visualize(self,image,detection_result):
         """Draws bounding boxes on the input image and return it.
@@ -63,19 +70,26 @@ class ObjectDetector:
         return image
 
     def detect_objects(self, frame):
-        # Convert the frame to an mp.Image object
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
+        
+        try:
+            # Convert the frame to an mp.Image object
+            mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
 
-        # Run object detection using the model
-        timestamp_ms = int(time.time() * 1000)  # current timestamp in milliseconds
-        self.detector.detect_async(mp_image, timestamp_ms=timestamp_ms)
+            # Run object detection using the model
+            timestamp_ms = int(time.time() * 1000)  # current timestamp in milliseconds
+            self.detector.detect_async(mp_image, timestamp_ms=timestamp_ms)
 
 
-        if self.detection_result_list:
+            if self.detection_result_list:
             # Get the detection result and visualize it
-            vis_image = self.visualize(frame, self.detection_result_list[0])
-            self.detection_result_list.clear()
-            return vis_image
+                vis_image = self.visualize(frame, self.detection_result_list[0])
+                self.detection_result_list.clear()
+                return vis_image
+        
 
-        # If no objects detected, return the original frame
-        return frame
+
+            # If no objects detected, return the original frame
+            return frame
+        except Exception as e:
+            print("Object - detect_objects(): ",e)
+            return frame

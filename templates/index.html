@@ -48,52 +48,8 @@
         <div id="enter-count" class="person-count">Enter: 0 people</div>
         <div id="exit-count" class="person-count">Exit: 0 people</div>
     </div>
-    <script>
 
-    // check in count
-    async function check_in_counts() {
-        await fetch('/checkWalkIn', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },})
-        .then(response => response.json())
-        .then(data => {
-            const enterCount = data.person_in;
-            document.getElementById('enter-count').innerText = `Enter: ${enterCount} people`;
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    }
 
-    // check out count
-    async function check_out_counts() {
-        await fetch('/checkWalkOut', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },})
-        .then(response => response.json())
-        .then(data => {
-            const exitCount = data.person_out;
-            document.getElementById('exit-count').innerText = `Exit: ${exitCount} people`;
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    }
-
-    // Call the function initially to fetch and update counts
-    check_in_counts();
-    check_out_counts();
-
-    // Call the function periodically to update counts at regular intervals
-    setInterval(function update(){
-        check_in_counts();
-        check_out_counts();
-    }, 500); // Update every 5 seconds (adjust as needed)
-</script>
 </body>
 </html>
 
