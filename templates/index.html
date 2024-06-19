@@ -51,5 +51,31 @@
 
 
 </body>
+
+<script>
+          // Get serial com
+    function serial_com(){
+        fetch('/serial_IR', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+                   })
+                   .then(async response => {
+                       data = await response.json()
+                       // Handle facial recognition result here
+                       console.log(data);
+   
+            
+                       
+                   })
+                   .catch(error => {
+                       console.error('Error:', error);
+                   });
+       }
+
+
+    setInterval(serial_com, 1000);
+</script>
 </html>
 
