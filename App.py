@@ -18,11 +18,6 @@ def data_serial():
     ser.timeout = 1
     
 
-
-
-
-
-
 # Create an instance of the ObjectDetector class
 object_detector = ObjectDetector(model='model/ssd_mobilenet_v2.tflite')
 object_detector.run()
