@@ -12,7 +12,7 @@ import cv2
 app = Flask(__name__)
 
 app.config["SERIAL_TIMEOUT"] = 1
-app.config["SERIAL_PORT"] = "COM7"
+app.config["SERIAL_PORT"] = "COM4"
 app.config["SERIAL_BAUDRATE"] = 9600
     
 

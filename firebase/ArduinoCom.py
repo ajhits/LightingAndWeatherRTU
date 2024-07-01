@@ -9,7 +9,7 @@ class Serial:
         self.Ser = None
         
         self.timeout  = 1
-        self.port     = "COM7"
+        self.port     = "COM4"
         self.baudrate = 9600
         
         self.message = "nag reset"
@@ -37,8 +37,8 @@ class Serial:
             while True:
                 if self.Ser.in_waiting > 0:
                     data = self.Ser.readline().decode().strip()
-                    self.message = data
-                    print(self.message)
+                    self.message = data.split(",")
+                    print(self.message[0])
                 
 
                     
