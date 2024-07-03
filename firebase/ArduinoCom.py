@@ -1,13 +1,13 @@
 
 import serial
 import threading
-import time
 
+import time
 class Serial:
-    def __init__(self,app=None):
+    def __init__(self,app=None, firebase=None):
         self.serial = serial
         self.Ser = None
-        
+        self.Firebase = firebase()
         self.timeout  = 1
         self.port     = "COM4"
         self.baudrate = 9600
@@ -35,10 +35,15 @@ class Serial:
             print("serial is open")
             
             while True:
+                last_trigger_time = time.time()
                 if self.Ser.in_waiting > 0:
                     data = self.Ser.readline().decode().strip()
-                    self.message = data.split(",")
-                    print(self.message[0])
+                    message = data.split(",")
+        
+                    
+                    self.verify_serial(data=bool(int(message[0])),text="person in")
+                    self.verify_serial(data=bool(int(message[1])),text="person out")
+            
                 
 
                     
@@ -50,5 +55,15 @@ class Serial:
     def get_serial_message(self):
         print(self.message)
         return self.message
+    
+    def verify_serial(self,data,text):
+        last_trigger_time = time.time()
+        if data:
+            print(text)
+            self.Firebase.firebase_insert({
+            "person_status": text,
+            "last_trigger_time": last_trigger_time
+        })
+        
         
 

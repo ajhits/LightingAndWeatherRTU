@@ -1,10 +1,10 @@
 from flask import Flask, render_template, Response,jsonify
 from model.Object_detection import ObjectDetector
-
+from firebase.Firebase import  Firebase
 from firebase.ArduinoCom import Serial
 
-import serial
-import time
+# import serial
+# import time
 import cv2
 
 
@@ -21,14 +21,19 @@ app.config["SERIAL_BAUDRATE"] = 9600
 object_detector = ObjectDetector(model='model/ssd_mobilenet_v2.tflite')
 object_detector.run()
 
-ser = Serial(app)
+ser = Serial(app,Firebase)
 
 # serial comunication
 @app.route('/serial_IR', methods=['GET'])
 def serial_IR():
     
     try:
-        return jsonify("wait")
+        
+        data = Firebase().firebase_read()
+        count_in = sum(1 for value in data if value.get('person_status') == "person in")
+        count_out = sum(1 for value in data if value.get('person_status') == "person out")
+        
+        return jsonify(count_in,count_out)
     except:
         return jsonify("0,0")
 

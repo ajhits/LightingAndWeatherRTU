@@ -45,9 +45,22 @@ class Firebase:
         except Exception as e:
             pass
             print(f"firebase_insert: Request failed - {e}")
-           
+            
+    def firebase_read(self):
+        current_date = datetime.now().strftime("%B %d %Y")
+        data = self.db.child("History").get().val() or {}
+        return [value for value in data.values() if 'date' in value and value['date'] == current_date]
+        
+    def test(self):
+        print("test")
         
 
+# data = Firebase().firebase_read()
+# count_in = sum(1 for value in data if value.get('person_status') == "person in")
+# count_out = sum(1 for value in data if value.get('person_status') == "person out")
+
+# print(count_in)
+# print(count_out)
         
         
         
